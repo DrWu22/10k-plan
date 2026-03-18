@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>10K Training Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0d0d0f;--surface: #16161a;--surface2: #1e1e24;--border: #2a2a35;
+  --accent: #f4500a;--accent2: #ffd166;--text: #e8e8f0;--muted: #8888a0;
+  --easy: #3aa66e;--tempo: #e8a020;--interval: #e84040;--long: #5580e8;
+  --rest: #555570;--recovery: #8855cc;--success: #3aa66e;--danger: #e84040;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;}
+
+/* SETUP BANNER */
+.setup-banner{background:linear-gradient(135deg,#1a1200,#2a1800);border-bottom:2px solid var(--accent2);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.setup-banner.connected{background:linear-gradient(135deg,#0a1a0f,#0d200f);border-bottom-color:var(--success);}
+.setup-left{display:flex;align-items:center;gap:12px;}
+.setup-dot{width:10px;height:10px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite;}
+.setup-banner.connected .setup-dot{background:var(--success);animation:none;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.setup-text{font-size:13px;color:var(--accent2);}
+.setup-banner.connected .setup-text{color:var(--success);}
+.setup-url-row{display:flex;gap:8px;align-items:center;}
+.setup-input{background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:6px;padding:7px 12px;color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;width:400px;max-width:100%;}
+.setup-input:focus{outline:none;border-color:var(--accent);}
+.btn-connect{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+.btn-connect:hover{background:#d43d00;}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;padding:52px 40px 44px;background:var(--surface);border-bottom:1px solid var(--border);}
+.hero::before{content:'10K';position:absolute;right:-10px;top:-30px;font-family:'Barlow Condensed',sans-serif;font-size:260px;font-weight:900;color:rgba(244,80,10,0.06);line-height:1;pointer-events:none;user-select:none;}
+.hero-tag{display:inline-block;background:var(--accent);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:18px;}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(42px,6vw,72px);font-weight:900;line-height:1;text-transform:uppercase;letter-spacing:-1px;}
+.hero h1 span{color:var(--accent);}
+.hero-sub{margin-top:14px;font-size:15px;color:var(--muted);max-width:500px;line-height:1.6;}
+.hero-stats{display:flex;gap:32px;margin-top:28px;flex-wrap:wrap;}
+.hero-stat{display:flex;flex-direction:column;gap:4px;}
+.hero-stat .val{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:var(--accent2);}
+.hero-stat .lbl{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+
+/* PROGRESS */
+.progress-bar-wrap{background:var(--surface2);border-bottom:1px solid var(--border);padding:14px 40px;display:flex;align-items:center;gap:16px;}
+.progress-label{font-size:12px;color:var(--muted);white-space:nowrap;}
+.progress-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s ease;width:0%;}
+.progress-pct{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--accent2);}
+
+/* LEGEND */
+.legend-bar{display:flex;gap:6px;flex-wrap:wrap;padding:14px 40px;background:var(--surface2);border-bottom:1px solid var(--border);}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);font-weight:500;padding:4px 10px;border-radius:20px;border:1px solid var(--border);}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* PACE GUIDE */
+.pace-guide{margin:24px 40px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 24px;}
+.pace-guide h3{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.pace-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+.pace-card{padding:12px 16px;border-radius:8px;border-left:3px solid;background:rgba(255,255,255,0.02);}
+.pace-card .pname{font-size:13px;font-weight:600;margin-bottom:2px;}
+.pace-card .pdesc{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* CONTENT */
+.content{padding:0 40px 60px;}
+.phase-header{display:flex;align-items:center;gap:14px;margin:36px 0 16px;}
+.phase-num{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:var(--accent);color:#fff;padding:3px 10px;border-radius:3px;}
+.phase-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:1px;}
+.phase-line{flex:1;height:1px;background:var(--border);}
+
+/* WEEK CARD */
+.week-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:20px;overflow:hidden;transition:border-color .2s;}
+.week-card:hover{border-color:#3a3a50;}
+.week-header{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+.week-left{display:flex;align-items:center;gap:14px;}
+.week-num{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--accent);line-height:1;}
+.week-info{display:flex;flex-direction:column;gap:3px;}
+.week-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.week-meta{font-size:12px;color:var(--muted);}
+.week-right{display:flex;align-items:center;gap:14px;}
+.km-badge{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--accent2);}
+.week-prog-mini{font-size:12px;color:var(--muted);}
+.week-prog-mini span{color:var(--success);font-weight:600;}
+.chevron{color:var(--muted);font-size:18px;transition:transform .3s;}
+.week-card.open .chevron{transform:rotate(180deg);}
+
+/* SESSIONS */
+.sessions{display:none;padding:0 22px 18px;}
+.week-card.open .sessions{display:block;}
+.session{display:grid;grid-template-columns:90px 1fr auto;gap:12px;border-bottom:1px solid var(--border);padding:14px 0;align-items:start;}
+.session:last-child{border-bottom:none;}
+.session-day{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding-top:4px;}
+.session-body{display:flex;flex-direction:column;gap:6px;}
+.session-type{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;width:fit-content;margin-bottom:2px;}
+.session-name{font-size:15px;font-weight:600;line-height:1.3;}
+.session-desc{font-size:13px;color:var(--muted);line-height:1.65;}
+.session-desc strong{color:var(--text);font-weight:600;}
+.tip-box{background:rgba(244,80,10,0.07);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:8px 12px;font-size:12px;color:var(--muted);margin-top:6px;line-height:1.55;}
+.tip-box strong{color:var(--accent);}
+.session-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px;padding-top:4px;}
+.log-btn{background:rgba(244,80,10,0.1);color:var(--accent);border:1px solid rgba(244,80,10,0.3);border-radius:6px;padding:6px 12px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s;}
+.log-btn:hover{background:rgba(244,80,10,0.2);border-color:var(--accent);}
+.log-btn:disabled{opacity:.4;cursor:not-allowed;}
+.status-badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap;display:none;}
+.status-badge.show{display:inline-block;}
+.status-completed{background:rgba(58,166,110,0.15);color:var(--success);}
+.status-skipped{background:rgba(232,64,64,0.15);color:var(--danger);}
+.status-partial{background:rgba(232,160,32,0.15);color:var(--tempo);}
+
+/* TYPE COLORS */
+.type-rest{background:rgba(85,85,112,0.25);color:#8888b0;}
+.type-easy{background:rgba(58,166,110,0.15);color:#3aa66e;}
+.type-recovery{background:rgba(136,85,204,0.15);color:#aa77dd;}
+.type-tempo{background:rgba(232,160,32,0.15);color:#e8a020;}
+.type-interval{background:rgba(232,64,64,0.15);color:#e84040;}
+.type-long{background:rgba(85,128,232,0.15);color:#7799ee;}
+.type-race{background:rgba(244,80,10,0.2);color:var(--accent);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:500px;margin:20px;transform:translateY(16px);transition:transform .25s;overflow:hidden;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{padding:20px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;}
+.modal-subtitle{font-size:13px;color:var(--muted);margin-top:3px;}
+.modal-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:0;line-height:1;transition:color .2s;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:22px 24px;display:flex;flex-direction:column;gap:18px;}
+.form-group{display:flex;flex-direction:column;gap:8px;}
+.form-label{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.status-toggle{display:flex;gap:8px;}
+.status-opt{flex:1;padding:9px 8px;border-radius:8px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:2px solid var(--border);background:rgba(255,255,255,0.02);color:var(--muted);transition:all .2s;}
+.status-opt:hover{border-color:#3a3a50;color:var(--text);}
+.active-completed{background:rgba(58,166,110,0.15)!important;border-color:var(--success)!important;color:var(--success)!important;}
+.active-skipped{background:rgba(232,64,64,0.15)!important;border-color:var(--danger)!important;color:var(--danger)!important;}
+.active-partial{background:rgba(232,160,32,0.15)!important;border-color:var(--tempo)!important;color:var(--tempo)!important;}
+.rpe-row{display:flex;align-items:center;gap:14px;}
+.rpe-slider{-webkit-appearance:none;flex:1;height:6px;border-radius:3px;background:var(--border);outline:none;}
+.rpe-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 2px var(--accent);}
+.rpe-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--accent2);min-width:28px;text-align:center;}
+.rpe-desc{font-size:12px;color:var(--muted);}
+.form-input,.form-textarea{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;transition:border-color .2s;width:100%;}
+.form-input:focus,.form-textarea:focus{outline:none;border-color:var(--accent);}
+.form-textarea{resize:vertical;min-height:80px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;}
+.btn-submit{flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:12px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+.btn-submit:hover{background:#d43d00;}
+.btn-submit:disabled{background:var(--border);cursor:not-allowed;}
+.btn-cancel{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:12px 18px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s;}
+.btn-cancel:hover{border-color:var(--text);color:var(--text);}
+.modal-msg{font-size:13px;padding:10px 14px;border-radius:8px;display:none;}
+.modal-msg.success{background:rgba(58,166,110,0.15);color:var(--success);display:block;}
+.modal-msg.error{background:rgba(232,64,64,0.15);color:var(--danger);display:block;}
+
+/* SETUP MODAL */
+.setup-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:2000;display:flex;align-items:center;justify-content:center;}
+.setup-modal{background:var(--surface);border:1px solid var(--accent2);border-radius:16px;max-width:560px;width:100%;margin:20px;padding:32px;}
+.setup-modal h2{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:var(--accent2);margin-bottom:8px;}
+.setup-modal p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+.setup-step{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);}
+.setup-step:last-of-type{border-bottom:none;}
+.step-num{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--accent);line-height:1;min-width:24px;}
+.step-text{font-size:13px;color:var(--text);line-height:1.65;}
+.step-text code{background:rgba(255,255,255,0.08);border-radius:4px;padding:1px 6px;font-size:12px;color:var(--accent2);}
+.setup-url-wrap{display:flex;gap:8px;margin-top:20px;}
+.setup-url-input{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;}
+.setup-url-input:focus{outline:none;border-color:var(--accent2);}
+.btn-save-url{background:var(--accent2);color:#000;border:none;border-radius:8px;padding:10px 20px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;}
+.btn-skip{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;margin-top:12px;text-decoration:underline;display:block;}
+
+/* FOOTER */
+.footer{margin:40px 40px 0;padding:24px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--muted);line-height:1.7;}
+.footer strong{color:var(--text);}
+
+@media(max-width:600px){
+  .hero,.legend-bar,.content,.pace-guide,.progress-bar-wrap,.setup-banner{padding-left:20px;padding-right:20px;}
+  .pace-guide,.footer{margin-left:20px;margin-right:20px;}
+  .session{grid-template-columns:70px 1fr;}
+  .session-actions{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- SETUP MODAL -->
+<div class="setup-modal-overlay" id="setupModal">
+  <div class="setup-modal">
+    <h2>🔗 Connect Google Sheets</h2>
+    <p>Follow these 4 steps once to wire up your training log. Every session you log will appear as a row in your Sheet automatically.</p>
+    <div class="setup-step">
+      <span class="step-num">1</span>
+      <div class="step-text">Open <strong>Google Sheets</strong> and create a new spreadsheet. Name it anything you like.</div>
+    </div>
+    <div class="setup-step">
+      <span class="step-num">2</span>
+      <div class="step-text">Click <strong>Extensions → Apps Script</strong>. Delete all existing code. Paste the full contents of the <code>apps-script.gs</code> file provided alongside this HTML file. Click <strong>Save (Ctrl+S)</strong>.</div>
+    </div>
+    <div class="setup-step">
+      <span class="step-num">3</span>
+      <div class="step-text">Click <strong>Deploy → New deployment</strong>. Type: <code>Web app</code>. Execute as: <code>Me</code>. Access: <code>Anyone</code>. Click <strong>Deploy</strong> and authorize when prompted.</div>
+    </div>
+    <div class="setup-step">
+      <span class="step-num">4</span>
+      <div class="step-text">Copy the <strong>Web App URL</strong> shown after deploying and paste it below.</div>
+    </div>
+    <div class="setup-url-wrap">
+      <input class="setup-url-input" id="setupUrlInput" type="url" placeholder="https://script.google.com/macros/s/…/exec"/>
+      <button class="btn-save-url" onclick="saveWebAppUrl()">Connect</button>
+    </div>
+    <button class="btn-skip" onclick="skipSetup()">Skip for now (Log buttons will be disabled)</button>
+  </div>
+</div>
+
+<!-- TOP BANNER -->
+<div class="setup-banner" id="setupBanner">
+  <div class="setup-left">
+    <div class="setup-dot" id="connDot"></div>
+    <span class="setup-text" id="connText">Not connected to Google Sheets</span>
+  </div>
+  <div class="setup-url-row">
+    <input class="setup-input" id="topUrlInput" type="url" placeholder="Paste Apps Script Web App URL to connect…"/>
+    <button class="btn-connect" onclick="connectFromBanner()">Connect</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Intermediate Runner</div>
+  <h1>8-Week <span>10K</span><br>Training Plan</h1>
+  <p class="hero-sub">Log every session — pace, RPE, notes — directly to your Google Sheet.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="val">8</span><span class="lbl">Weeks</span></div>
+    <div class="hero-stat"><span class="val">4–5</span><span class="lbl">Days / Week</span></div>
+    <div class="hero-stat"><span class="val" id="statLogged">0</span><span class="lbl">Sessions Logged</span></div>
+    <div class="hero-stat"><span class="val" id="statDone">0</span><span class="lbl">Completed</span></div>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <span class="progress-label">Overall Progress</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+</div>
+
+<!-- LEGEND -->
+<div class="legend-bar">
+  <div class="legend-item"><span class="dot" style="background:#3aa66e"></span>Easy Run</div>
+  <div class="legend-item"><span class="dot" style="background:#e8a020"></span>Tempo</div>
+  <div class="legend-item"><span class="dot" style="background:#e84040"></span>Intervals</div>
+  <div class="legend-item"><span class="dot" style="background:#7799ee"></span>Long Run</div>
+  <div class="legend-item"><span class="dot" style="background:#aa77dd"></span>Recovery</div>
+  <div class="legend-item"><span class="dot" style="background:#8888b0"></span>Rest</div>
+  <div class="legend-item"><span class="dot" style="background:var(--accent)"></span>Race Day</div>
+</div>
+
+<!-- PACE GUIDE -->
+<div class="pace-guide">
+  <h3>🎯 Pace Reference Guide</h3>
+  <div class="pace-grid">
+    <div class="pace-card" style="border-color:#3aa66e"><div class="pname" style="color:#3aa66e">Easy Pace</div><div class="pdesc">Conversational. +90–120 sec/km above 10K pace. ~65–70% max HR.</div></div>
+    <div class="pace-card" style="border-color:#e8a020"><div class="pname" style="color:#e8a020">Tempo Pace</div><div class="pdesc">Comfortably hard. +15–25 sec/km above 10K pace. ~80–85% max HR.</div></div>
+    <div class="pace-card" style="border-color:#e84040"><div class="pname" style="color:#e84040">Interval Pace</div><div class="pdesc">Goal 10K pace or slightly faster. ~88–93% max HR.</div></div>
+    <div class="pace-card" style="border-color:#7799ee"><div class="pname" style="color:#7799ee">Long Run Pace</div><div class="pdesc">Same as Easy. Build time on feet, not speed.</div></div>
+    <div class="pace-card" style="border-color:#aa77dd"><div class="pname" style="color:#aa77dd">Recovery Pace</div><div class="pdesc">Very easy. Almost uncomfortably slow. ~60% max HR.</div></div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<div class="phase-header"><span class="phase-num">Phase 1</span><span class="phase-title">Base Activation — Weeks 1 & 2</span><div class="phase-line"></div></div>
+
+<!-- WEEK 1 -->
+<div class="week-card open" id="week-1">
+  <div class="week-header" onclick="toggleWeek('week-1')">
+    <div class="week-left"><span class="week-num">01</span><div class="week-info"><span class="week-title">Ignition Week</span><span class="week-meta">Re-activate speed & aerobic base</span></div></div>
+    <div class="week-right"><span class="week-prog-mini" id="wp-1"><span id="wc-1">0</span>/7 logged</span><span class="km-badge">~25 km</span><span class="chevron">▼</span></div>
+  </div>
+  <div class="sessions">
+    <div class="session"><div class="session-day">Monday</div><div class="session-body"><span class="session-type type-rest">● Rest / Cross-Train</span><div class="session-name">Active Recovery Day</div><div class="session-desc">Full rest, or 30–45 min low-impact cross-training: cycling, swimming, or yoga. No running.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(1,'Monday','Active Recovery Day','Rest')">Log</button><span class="status-badge" id="b-1-0"></span></div></div>
+    <div class="session"><div class="session-day">Tuesday</div><div class="session-body"><span class="session-type type-interval">● Intervals</span><div class="session-name">6 × 400m — Speed Primer</div><div class="session-desc"><strong>Warm-up:</strong> 10 min easy + dynamic drills.<br><strong>Main set:</strong> 6 × 400m at goal 10K pace. <strong>Rest 90 sec</strong> between reps.<br><strong>Cool-down:</strong> 10 min easy. Total: ~6 km.</div><div class="tip-box"><strong>Coach's tip:</strong> Reps 1–2 should feel easy. Consistency across all 6 is the goal.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(1,'Tuesday','6 × 400m Speed Primer','Intervals')">Log</button><span class="status-badge" id="b-1-1"></span></div></div>
+    <div class="session"><div class="session-day">Wednesday</div><div class="session-body"><span class="session-type type-easy">● Easy Run</span><div class="session-name">6 km Easy</div><div class="session-desc">Fully conversational easy pace for 6 km. Aerobic base maintenance — if in doubt, go slower.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(1,'Wednesday','6 km Easy','Easy Run')">Log</button><span class="status-badge" id="b-1-2"></span></div></div>
+    <div class="session"><div class="session-day">Thursday</div><div class="session-body"><span class="session-type type-tempo">● Tempo Run</span><div class="session-name">20 min Tempo</div><div class="session-desc"><strong>Warm-up:</strong> 10 min easy. <strong>Main set:</strong> 20 min continuous tempo (comfortably hard — 3–4 words, not full sentences). <strong>Cool-down:</strong> 10 min easy. Total: ~7 km.</div><div class="tip-box"><strong>Coach's tip:</strong> First 5 min should feel easy-moderate. You'll settle in naturally.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(1,'Thursday','20 min Tempo','Tempo Run')">Log</button><span class="status-badge" id="b-1-3"></span></div></div>
+    <div class="session"><div class="session-day">Friday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Complete rest. Sleep, hydrate, and fuel well ahead of long run Saturday.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(1,'Friday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-1-4"></span></div></div>
+    <div class="session"><div class="session-day">Saturday</div><div class="session-body"><span class="session-type type-long">● Long Run</span><div class="session-name">10 km Long Run</div><div class="session-desc">10 km at relaxed easy pace. Practice race-day fueling (gel or water at ~5 km if needed).</div><div class="tip-box"><strong>Coach's tip:</strong> Finish feeling like you could run 2–3 more km.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(1,'Saturday','10 km Long Run','Long Run')">Log</button><span class="status-badge" id="b-1-5"></span></div></div>
+    <div class="session"><div class="session-day">Sunday</div><div class="session-body"><span class="session-type type-recovery">● Recovery</span><div class="session-name">3 km Recovery Jog</div><div class="session-desc">Very slow 3 km to flush out fatigue. HR under 65% max. Can be replaced by 30 min walk.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(1,'Sunday','3 km Recovery Jog','Recovery')">Log</button><span class="status-badge" id="b-1-6"></span></div></div>
+  </div>
+</div>
+
+<!-- WEEK 2 -->
+<div class="week-card" id="week-2">
+  <div class="week-header" onclick="toggleWeek('week-2')">
+    <div class="week-left"><span class="week-num">02</span><div class="week-info"><span class="week-title">Volume Build</span><span class="week-meta">Extend tempo & interval duration</span></div></div>
+    <div class="week-right"><span class="week-prog-mini" id="wp-2"><span id="wc-2">0</span>/7 logged</span><span class="km-badge">~28 km</span><span class="chevron">▼</span></div>
+  </div>
+  <div class="sessions">
+    <div class="session"><div class="session-day">Monday</div><div class="session-body"><span class="session-type type-rest">● Rest / Cross-Train</span><div class="session-name">Active Recovery</div><div class="session-desc">Rest or 30–45 min cross-training. Mobility work recommended (hip flexors, calves, ITB).</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(2,'Monday','Active Recovery','Rest')">Log</button><span class="status-badge" id="b-2-0"></span></div></div>
+    <div class="session"><div class="session-day">Tuesday</div><div class="session-body"><span class="session-type type-interval">● Intervals</span><div class="session-name">5 × 800m — Lactate Introduction</div><div class="session-desc"><strong>Warm-up:</strong> 10 min easy + drills. <strong>Main set:</strong> 5 × 800m at 10K pace. <strong>Rest 2 min</strong> between reps. <strong>Cool-down:</strong> 10 min easy. Total: ~8 km.</div><div class="tip-box"><strong>Coach's tip:</strong> Rep 5 should be as fast as Rep 1 — if dying by Rep 4, you started too fast.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(2,'Tuesday','5 × 800m Lactate Introduction','Intervals')">Log</button><span class="status-badge" id="b-2-1"></span></div></div>
+    <div class="session"><div class="session-day">Wednesday</div><div class="session-body"><span class="session-type type-easy">● Easy Run</span><div class="session-name">6 km Easy + 4 Strides</div><div class="session-desc">6 km easy. In the last km, add 4 × 80m strides at 5K pace. Full recovery between strides.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(2,'Wednesday','6 km Easy + 4 Strides','Easy Run')">Log</button><span class="status-badge" id="b-2-2"></span></div></div>
+    <div class="session"><div class="session-day">Thursday</div><div class="session-body"><span class="session-type type-tempo">● Tempo Run</span><div class="session-name">25 min Continuous Tempo</div><div class="session-desc"><strong>Warm-up:</strong> 10 min easy. <strong>Main set:</strong> 25 continuous minutes at tempo effort. <strong>Cool-down:</strong> 10 min easy. Total: ~8 km.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(2,'Thursday','25 min Continuous Tempo','Tempo Run')">Log</button><span class="status-badge" id="b-2-3"></span></div></div>
+    <div class="session"><div class="session-day">Friday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Complete rest. Training adaptations happen during recovery, not during runs.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(2,'Friday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-2-4"></span></div></div>
+    <div class="session"><div class="session-day">Saturday</div><div class="session-body"><span class="session-type type-long">● Long Run</span><div class="session-name">11 km Long Run</div><div class="session-desc">11 km at easy, conversational pace. You should be able to hold a full conversation the whole way.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(2,'Saturday','11 km Long Run','Long Run')">Log</button><span class="status-badge" id="b-2-5"></span></div></div>
+    <div class="session"><div class="session-day">Sunday</div><div class="session-body"><span class="session-type type-recovery">● Recovery</span><div class="session-name">4 km Recovery Jog</div><div class="session-desc">Gentle 4 km. No pace target. Optional: replace with 20 min foam rolling + walking.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(2,'Sunday','4 km Recovery Jog','Recovery')">Log</button><span class="status-badge" id="b-2-6"></span></div></div>
+  </div>
+</div>
+
+<div class="phase-header"><span class="phase-num">Phase 2</span><span class="phase-title">Race-Specific Build — Weeks 3–6</span><div class="phase-line"></div></div>
+
+<!-- WEEK 3 -->
+<div class="week-card" id="week-3">
+  <div class="week-header" onclick="toggleWeek('week-3')">
+    <div class="week-left"><span class="week-num">03</span><div class="week-info"><span class="week-title">Threshold Builder</span><span class="week-meta">Longer intervals & extended tempo</span></div></div>
+    <div class="week-right"><span class="week-prog-mini" id="wp-3"><span id="wc-3">0</span>/7 logged</span><span class="km-badge">~31 km</span><span class="chevron">▼</span></div>
+  </div>
+  <div class="sessions">
+    <div class="session"><div class="session-day">Monday</div><div class="session-body"><span class="session-type type-rest">● Rest / Cross-Train</span><div class="session-name">Active Recovery</div><div class="session-desc">Rest or 40 min cross-training. Yoga or core strengthening session recommended.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(3,'Monday','Active Recovery','Rest')">Log</button><span class="status-badge" id="b-3-0"></span></div></div>
+    <div class="session"><div class="session-day">Tuesday</div><div class="session-body"><span class="session-type type-interval">● Intervals</span><div class="session-name">4 × 1200m — Race Pace Conditioning</div><div class="session-desc"><strong>Warm-up:</strong> 12 min easy + drills. <strong>Main set:</strong> 4 × 1200m at 10K pace. <strong>Rest 2:30 min</strong>. <strong>Cool-down:</strong> 10 min easy. Total: ~9 km.</div><div class="tip-box"><strong>Coach's tip:</strong> The middle 400m of each rep is where athletes fade — stay disciplined.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(3,'Tuesday','4 × 1200m Race Pace Conditioning','Intervals')">Log</button><span class="status-badge" id="b-3-1"></span></div></div>
+    <div class="session"><div class="session-day">Wednesday</div><div class="session-body"><span class="session-type type-easy">● Easy Run</span><div class="session-name">7 km Easy</div><div class="session-desc">Steady 7 km easy. Keep effort truly relaxed — should leave you feeling refreshed.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(3,'Wednesday','7 km Easy','Easy Run')">Log</button><span class="status-badge" id="b-3-2"></span></div></div>
+    <div class="session"><div class="session-day">Thursday</div><div class="session-body"><span class="session-type type-tempo">● Tempo Run</span><div class="session-name">2 × 15 min Tempo w/ 3 min rest</div><div class="session-desc"><strong>Warm-up:</strong> 10 min easy. <strong>Main set:</strong> 15 min tempo, 3 min easy jog, 15 min tempo. <strong>Cool-down:</strong> 10 min easy. Total: ~9 km.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(3,'Thursday','2 × 15 min Tempo','Tempo Run')">Log</button><span class="status-badge" id="b-3-3"></span></div></div>
+    <div class="session"><div class="session-day">Friday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Complete rest. Good carb dinner before Saturday's long run.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(3,'Friday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-3-4"></span></div></div>
+    <div class="session"><div class="session-day">Saturday</div><div class="session-body"><span class="session-type type-long">● Long Run</span><div class="session-name">12 km Long Run</div><div class="session-desc">12 km easy. Final 2 km: gradually increase to moderate effort — simulates racing when fatigued.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(3,'Saturday','12 km Long Run','Long Run')">Log</button><span class="status-badge" id="b-3-5"></span></div></div>
+    <div class="session"><div class="session-day">Sunday</div><div class="session-body"><span class="session-type type-recovery">● Recovery</span><div class="session-name">4 km Recovery + Stretching</div><div class="session-desc">Very easy 4 km + 15–20 min full-body stretching: quads, hamstrings, calves, hip flexors, glutes.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(3,'Sunday','4 km Recovery + Stretching','Recovery')">Log</button><span class="status-badge" id="b-3-6"></span></div></div>
+  </div>
+</div>
+
+<!-- WEEK 4 -->
+<div class="week-card" id="week-4">
+  <div class="week-header" onclick="toggleWeek('week-4')">
+    <div class="week-left"><span class="week-num">04</span><div class="week-info"><span class="week-title">Recovery Week ⚡</span><span class="week-meta">Step back — let adaptations consolidate</span></div></div>
+    <div class="week-right"><span class="week-prog-mini" id="wp-4"><span id="wc-4">0</span>/7 logged</span><span class="km-badge">~22 km</span><span class="chevron">▼</span></div>
+  </div>
+  <div class="sessions">
+    <div class="session"><div class="session-day">Monday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Complete rest. 3 solid weeks done — let your body absorb the training.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(4,'Monday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-4-0"></span></div></div>
+    <div class="session"><div class="session-day">Tuesday</div><div class="session-body"><span class="session-type type-interval">● Light Intervals</span><div class="session-name">6 × 400m — Easy, Refreshing</div><div class="session-desc"><strong>Main set:</strong> 6 × 400m at a <em>relaxed</em> 10K pace — no straining. <strong>Rest 2 min.</strong> Keeps neuromuscular patterns without adding fatigue. Total: ~6 km.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(4,'Tuesday','6 × 400m Light Intervals','Intervals')">Log</button><span class="status-badge" id="b-4-1"></span></div></div>
+    <div class="session"><div class="session-day">Wednesday</div><div class="session-body"><span class="session-type type-easy">● Easy Run</span><div class="session-name">5 km Easy</div><div class="session-desc">Very relaxed 5 km. HR under 65% max. Enjoy the reduced load.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(4,'Wednesday','5 km Easy','Easy Run')">Log</button><span class="status-badge" id="b-4-2"></span></div></div>
+    <div class="session"><div class="session-day">Thursday</div><div class="session-body"><span class="session-type type-easy">● Easy + Strides</span><div class="session-name">6 km Easy + 4 Strides</div><div class="session-desc">6 km easy, then 4 × 80m strides to keep legs feeling snappy.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(4,'Thursday','6 km Easy + 4 Strides','Easy Run')">Log</button><span class="status-badge" id="b-4-3"></span></div></div>
+    <div class="session"><div class="session-day">Friday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Rest. Optional: light yoga or foam rolling.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(4,'Friday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-4-4"></span></div></div>
+    <div class="session"><div class="session-day">Saturday</div><div class="session-body"><span class="session-type type-long">● Long Run</span><div class="session-name">10 km Long Run (Reduced)</div><div class="session-desc">10 km easy. No watch pressure. Focus on form and breathing.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(4,'Saturday','10 km Long Run (Reduced)','Long Run')">Log</button><span class="status-badge" id="b-4-5"></span></div></div>
+    <div class="session"><div class="session-day">Sunday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Enjoy a full second rest day. Recovery week means recovery — trust the process.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(4,'Sunday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-4-6"></span></div></div>
+  </div>
+</div>
+
+<!-- WEEK 5 -->
+<div class="week-card" id="week-5">
+  <div class="week-header" onclick="toggleWeek('week-5')">
+    <div class="week-left"><span class="week-num">05</span><div class="week-info"><span class="week-title">Peak Load I</span><span class="week-meta">1 km reps — race-pace mastery</span></div></div>
+    <div class="week-right"><span class="week-prog-mini" id="wp-5"><span id="wc-5">0</span>/7 logged</span><span class="km-badge">~34 km</span><span class="chevron">▼</span></div>
+  </div>
+  <div class="sessions">
+    <div class="session"><div class="session-day">Monday</div><div class="session-body"><span class="session-type type-rest">● Rest / Cross-Train</span><div class="session-name">Active Recovery</div><div class="session-desc">Rest or 45 min cross-training. Strength work (squats, single-leg deadlifts, calf raises) recommended.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(5,'Monday','Active Recovery','Rest')">Log</button><span class="status-badge" id="b-5-0"></span></div></div>
+    <div class="session"><div class="session-day">Tuesday</div><div class="session-body"><span class="session-type type-interval">● Intervals</span><div class="session-name">5 × 1000m — Race Pace Mastery</div><div class="session-desc"><strong>Warm-up:</strong> 12 min easy + drills + 2 strides. <strong>Main set:</strong> 5 × 1000m at 10K pace. <strong>Rest 90 sec</strong> (short rest = race-specific stimulus). <strong>Cool-down:</strong> 10 min easy. Total: ~10 km.</div><div class="tip-box"><strong>Coach's tip:</strong> 90 sec rest trains your body to sustain pace under fatigue — exactly what racing demands.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(5,'Tuesday','5 × 1000m Race Pace Mastery','Intervals')">Log</button><span class="status-badge" id="b-5-1"></span></div></div>
+    <div class="session"><div class="session-day">Wednesday</div><div class="session-body"><span class="session-type type-easy">● Easy Run</span><div class="session-name">7 km Easy</div><div class="session-desc">7 km easy. Focus on relaxed breathing and good posture.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(5,'Wednesday','7 km Easy','Easy Run')">Log</button><span class="status-badge" id="b-5-2"></span></div></div>
+    <div class="session"><div class="session-day">Thursday</div><div class="session-body"><span class="session-type type-tempo">● Tempo Run</span><div class="session-name">30 min Continuous Tempo</div><div class="session-desc"><strong>Warm-up:</strong> 12 min easy. <strong>Main set:</strong> 30 min at lactate threshold — aim for negative splits. <strong>Cool-down:</strong> 10 min easy. Total: ~10 km.</div><div class="tip-box"><strong>Coach's tip:</strong> A 30 min tempo is significant. Even lap pace is the target; slight negative splits is a win.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(5,'Thursday','30 min Continuous Tempo','Tempo Run')">Log</button><span class="status-badge" id="b-5-3"></span></div></div>
+    <div class="session"><div class="session-day">Friday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Rest. Carb-rich dinner before your biggest long run yet.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(5,'Friday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-5-4"></span></div></div>
+    <div class="session"><div class="session-day">Saturday</div><div class="session-body"><span class="session-type type-long">● Long Run</span><div class="session-name">13 km Progressive Long Run</div><div class="session-desc"><strong>Km 1–8:</strong> Easy. <strong>Km 9–11:</strong> Moderate. <strong>Km 12–13:</strong> Comfortably hard.</div><div class="tip-box"><strong>Coach's tip:</strong> This is your most race-specific session. It teaches your body to accelerate when fatigued.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(5,'Saturday','13 km Progressive Long Run','Long Run')">Log</button><span class="status-badge" id="b-5-5"></span></div></div>
+    <div class="session"><div class="session-day">Sunday</div><div class="session-body"><span class="session-type type-recovery">● Recovery</span><div class="session-name">4 km Recovery Jog</div><div class="session-desc">Very easy 4 km. Keep HR very low. Foam roll and stretch after.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(5,'Sunday','4 km Recovery Jog','Recovery')">Log</button><span class="status-badge" id="b-5-6"></span></div></div>
+  </div>
+</div>
+
+<!-- WEEK 6 -->
+<div class="week-card" id="week-6">
+  <div class="week-header" onclick="toggleWeek('week-6')">
+    <div class="week-left"><span class="week-num">06</span><div class="week-info"><span class="week-title">Peak Load II</span><span class="week-meta">Highest volume — final peak week</span></div></div>
+    <div class="week-right"><span class="week-prog-mini" id="wp-6"><span id="wc-6">0</span>/7 logged</span><span class="km-badge">~37 km</span><span class="chevron">▼</span></div>
+  </div>
+  <div class="sessions">
+    <div class="session"><div class="session-day">Monday</div><div class="session-body"><span class="session-type type-rest">● Rest / Cross-Train</span><div class="session-name">Active Recovery</div><div class="session-desc">Rest or 45 min cross-training. Core and hip strengthening recommended.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(6,'Monday','Active Recovery','Rest')">Log</button><span class="status-badge" id="b-6-0"></span></div></div>
+    <div class="session"><div class="session-day">Tuesday</div><div class="session-body"><span class="session-type type-interval">● Intervals</span><div class="session-name">3 × 2000m — Race Simulation</div><div class="session-desc"><strong>Warm-up:</strong> 12 min easy + drills. <strong>Main set:</strong> 3 × 2000m at 10K pace. <strong>Rest 3 min.</strong> <strong>Cool-down:</strong> 10 min easy. Total: ~11 km.</div><div class="tip-box"><strong>Coach's tip:</strong> Your hardest session. Start at goal pace — not faster. Hold km 1, fight km 2.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(6,'Tuesday','3 × 2000m Race Simulation','Intervals')">Log</button><span class="status-badge" id="b-6-1"></span></div></div>
+    <div class="session"><div class="session-day">Wednesday</div><div class="session-body"><span class="session-type type-easy">● Easy Run</span><div class="session-name">7 km Easy</div><div class="session-desc">Take it genuinely slow. Your legs will remember Tuesday — that's fine. Just move.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(6,'Wednesday','7 km Easy','Easy Run')">Log</button><span class="status-badge" id="b-6-2"></span></div></div>
+    <div class="session"><div class="session-day">Thursday</div><div class="session-body"><span class="session-type type-tempo">● Tempo Run</span><div class="session-name">2 × 20 min Tempo w/ 5 min jog</div><div class="session-desc"><strong>Warm-up:</strong> 10 min easy. <strong>Main set:</strong> 20 min tempo, 5 min easy jog, 20 min tempo. <strong>Cool-down:</strong> 10 min easy. Total: ~11 km.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(6,'Thursday','2 × 20 min Tempo','Tempo Run')">Log</button><span class="status-badge" id="b-6-3"></span></div></div>
+    <div class="session"><div class="session-day">Friday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Rest. Sleep and nutrition are part of training.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(6,'Friday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-6-4"></span></div></div>
+    <div class="session"><div class="session-day">Saturday</div><div class="session-body"><span class="session-type type-long">● Long Run</span><div class="session-name">14 km Long Run</div><div class="session-desc">Your longest run of the plan. Easy, consistent effort throughout. Practice full race nutrition.</div><div class="tip-box"><strong>Coach's tip:</strong> Your final big confidence builder. Run it well and feel strong.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(6,'Saturday','14 km Long Run','Long Run')">Log</button><span class="status-badge" id="b-6-5"></span></div></div>
+    <div class="session"><div class="session-day">Sunday</div><div class="session-body"><span class="session-type type-recovery">● Recovery</span><div class="session-name">5 km Easy Recovery</div><div class="session-desc">Very gentle 5 km. HR under 65% max. Foam rolling, mobility, and hydration are key.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(6,'Sunday','5 km Easy Recovery','Recovery')">Log</button><span class="status-badge" id="b-6-6"></span></div></div>
+  </div>
+</div>
+
+<div class="phase-header"><span class="phase-num">Phase 3</span><span class="phase-title">Taper & Race — Weeks 7 & 8</span><div class="phase-line"></div></div>
+
+<!-- WEEK 7 -->
+<div class="week-card" id="week-7">
+  <div class="week-header" onclick="toggleWeek('week-7')">
+    <div class="week-left"><span class="week-num">07</span><div class="week-info"><span class="week-title">Taper Begins</span><span class="week-meta">Reduce volume, keep quality sharp</span></div></div>
+    <div class="week-right"><span class="week-prog-mini" id="wp-7"><span id="wc-7">0</span>/7 logged</span><span class="km-badge">~26 km</span><span class="chevron">▼</span></div>
+  </div>
+  <div class="sessions">
+    <div class="session"><div class="session-day">Monday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Complete rest. The taper begins — trust the drop in volume.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(7,'Monday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-7-0"></span></div></div>
+    <div class="session"><div class="session-day">Tuesday</div><div class="session-body"><span class="session-type type-interval">● Intervals</span><div class="session-name">4 × 800m + 4 × 200m — Sharpener</div><div class="session-desc"><strong>Main set:</strong> 4 × 800m at 10K pace (2 min rest), then 4 × 200m slightly faster (90 sec rest). Total: ~8 km.</div><div class="tip-box"><strong>Coach's tip:</strong> 200m reps should feel controlled and powerful — not an all-out sprint.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(7,'Tuesday','4×800m + 4×200m Sharpener','Intervals')">Log</button><span class="status-badge" id="b-7-1"></span></div></div>
+    <div class="session"><div class="session-day">Wednesday</div><div class="session-body"><span class="session-type type-easy">● Easy Run</span><div class="session-name">6 km Easy</div><div class="session-desc">Legs may feel flat (taper effect) — completely normal and temporary.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(7,'Wednesday','6 km Easy','Easy Run')">Log</button><span class="status-badge" id="b-7-2"></span></div></div>
+    <div class="session"><div class="session-day">Thursday</div><div class="session-body"><span class="session-type type-tempo">● Short Tempo</span><div class="session-name">15 min Tempo</div><div class="session-desc"><strong>Warm-up:</strong> 10 min easy. <strong>Main set:</strong> 15 min tempo. <strong>Cool-down:</strong> 10 min easy. Total: ~6 km.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(7,'Thursday','15 min Tempo','Tempo Run')">Log</button><span class="status-badge" id="b-7-3"></span></div></div>
+    <div class="session"><div class="session-day">Friday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Rest. Start thinking about your race pacing strategy.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(7,'Friday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-7-4"></span></div></div>
+    <div class="session"><div class="session-day">Saturday</div><div class="session-body"><span class="session-type type-long">● Medium Long Run</span><div class="session-name">10 km Easy</div><div class="session-desc">Confidence-building 10 km. Easy throughout. Last run over 6 km before race day.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(7,'Saturday','10 km Easy','Long Run')">Log</button><span class="status-badge" id="b-7-5"></span></div></div>
+    <div class="session"><div class="session-day">Sunday</div><div class="session-body"><span class="session-type type-recovery">● Recovery</span><div class="session-name">3 km Easy Shakeout</div><div class="session-desc">Short 3 km. Light, easy, enjoyable. Stretch after. You're nearly race-ready.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(7,'Sunday','3 km Easy Shakeout','Recovery')">Log</button><span class="status-badge" id="b-7-6"></span></div></div>
+  </div>
+</div>
+
+<!-- WEEK 8 -->
+<div class="week-card" id="week-8">
+  <div class="week-header" onclick="toggleWeek('week-8')">
+    <div class="week-left"><span class="week-num">08</span><div class="week-info"><span class="week-title">Race Week 🏁</span><span class="week-meta">Stay sharp, stay fresh — go race</span></div></div>
+    <div class="week-right"><span class="week-prog-mini" id="wp-8"><span id="wc-8">0</span>/7 logged</span><span class="km-badge">~16 km + Race</span><span class="chevron">▼</span></div>
+  </div>
+  <div class="sessions">
+    <div class="session"><div class="session-day">Monday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest</div><div class="session-desc">Complete rest. No extra walking. Protect your legs.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(8,'Monday','Full Rest','Rest')">Log</button><span class="status-badge" id="b-8-0"></span></div></div>
+    <div class="session"><div class="session-day">Tuesday</div><div class="session-body"><span class="session-type type-easy">● Easy + Strides</span><div class="session-name">5 km Easy + 4 × 100m Race Pace Strides</div><div class="session-desc">5 km easy + 4 × 100m strides at race pace. Smooth, relaxed, effortless. Full walk recovery between.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(8,'Tuesday','5 km Easy + Race Pace Strides','Easy Run')">Log</button><span class="status-badge" id="b-8-1"></span></div></div>
+    <div class="session"><div class="session-day">Wednesday</div><div class="session-body"><span class="session-type type-easy">● Easy Run</span><div class="session-name">4 km Easy Shakeout</div><div class="session-desc">Very easy 4 km. Breathe relaxed. Visualize your race start.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(8,'Wednesday','4 km Easy Shakeout','Easy Run')">Log</button><span class="status-badge" id="b-8-2"></span></div></div>
+    <div class="session"><div class="session-day">Thursday</div><div class="session-body"><span class="session-type type-easy">● Mini Activation</span><div class="session-name">3 km Easy + 3 Strides</div><div class="session-desc">3 km easy + 3 × 80m strides at race pace. Lay out race kit tonight. Eat complex carbs.</div><div class="tip-box"><strong>Coach's tip:</strong> Sleep as early as possible Thu & Fri. Carb-load moderately for 2 days pre-race.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(8,'Thursday','3 km Easy + 3 Strides','Easy Run')">Log</button><span class="status-badge" id="b-8-3"></span></div></div>
+    <div class="session"><div class="session-day">Friday</div><div class="session-body"><span class="session-type type-rest">● Rest</span><div class="session-name">Full Rest — Pre-Race</div><div class="session-desc">Complete rest. Pin race number. Review pacing plan. Sleep early.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(8,'Friday','Full Rest Pre-Race','Rest')">Log</button><span class="status-badge" id="b-8-4"></span></div></div>
+    <div class="session"><div class="session-day">Saturday</div><div class="session-body"><span class="session-type type-race">🏁 Race Day</span><div class="session-name">10K Race</div><div class="session-desc"><strong>Morning:</strong> Wake 2–3 hrs before. Eat practiced breakfast. Arrive 45 min early.<br><strong>Strategy:</strong> Hold back km 1–3. Build km 4–7. Race km 8–10. Leave everything on the road.</div><div class="tip-box"><strong>Coach's tip:</strong> If km 1 feels controlled and slightly slow — perfect. Your fitness will carry you home.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(8,'Saturday','10K Race','Race')">Log</button><span class="status-badge" id="b-8-5"></span></div></div>
+    <div class="session"><div class="session-day">Sunday</div><div class="session-body"><span class="session-type type-rest">● Rest — Celebrate 🎉</span><div class="session-name">Full Rest & Recovery</div><div class="session-desc">You did it. Complete rest. Eat well, hydrate, and celebrate your achievement.</div></div><div class="session-actions"><button class="log-btn" onclick="openModal(8,'Sunday','Full Rest & Celebrate','Rest')">Log</button><span class="status-badge" id="b-8-6"></span></div></div>
+  </div>
+</div>
+
+<div class="footer">
+  <strong>📌 General Guidelines</strong><br>
+  <strong>10% rule:</strong> Never increase weekly mileage by more than 10% week-over-week. · <strong>Sleep:</strong> 7–9 hours — training adaptations happen during recovery. · <strong>Nutrition:</strong> Fuel hard days with carbohydrates; don't under-fuel. · <strong>Pain vs. soreness:</strong> Muscle soreness is expected; sharp or joint pain → rest and see a physio. · <strong>Google Sheets:</strong> Every "Log" button sends your data (status, pace, RPE, notes) directly to your Sheet as a new row.
+</div>
+</div>
+
+<!-- LOG MODAL -->
+<div class="modal-overlay" id="logModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">Log Session</div>
+        <div class="modal-subtitle" id="modalSubtitle">Week — Day</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <div class="status-toggle">
+          <div class="status-opt" id="opt-completed" onclick="selectStatus('Completed')">✅ Completed</div>
+          <div class="status-opt" id="opt-partial"   onclick="selectStatus('Partial')">⚡ Partial</div>
+          <div class="status-opt" id="opt-skipped"   onclick="selectStatus('Skipped')">❌ Skipped</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Actual Pace / Time</label>
+        <input class="form-input" id="paceInput" type="text" placeholder="e.g.  5:10 /km   or   28:45 total"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">RPE — Rate of Perceived Effort (1–10)</label>
+        <div class="rpe-row">
+          <input class="rpe-slider" id="rpeSlider" type="range" min="1" max="10" value="5" oninput="updateRpe(this.value)"/>
+          <span class="rpe-val" id="rpeVal">5</span>
+        </div>
+        <div class="rpe-desc" id="rpeDesc">Moderate — sustainable effort</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="notesInput" placeholder="How did it feel? Any aches, wins, or thoughts…"></textarea>
+      </div>
+      <div class="modal-msg" id="modalMsg"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-submit" id="submitBtn" onclick="submitLog()">Save to Sheets</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────
+let WEB_APP_URL = localStorage.getItem('gasUrl') || '';
+let currentSession = {};
+let selectedStatus = '';
+let logged = JSON.parse(localStorage.getItem('loggedSessions') || '{}');
+const TOTAL = 56;
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const RPE = {1:'Very easy — barely moving',2:'Easy — comfortable stroll',3:'Light — can chat freely',4:'Moderate-light — light breathing',5:'Moderate — sustainable effort',6:'Somewhat hard — focused breathing',7:'Hard — difficult to hold a sentence',8:'Very hard — race effort',9:'Maximum — near all-out',10:'All-out — cannot sustain'};
+
+// ─── INIT ─────────────────────────────────────────
+window.addEventListener('load', () => {
+  if (WEB_APP_URL) { closeSetupModal(); updateBanner(true); }
+  restoreBadges();
+  refreshProgress();
+});
+
+// ─── SETUP ───────────────────────────────────────
+function saveWebAppUrl() {
+  const url = document.getElementById('setupUrlInput').value.trim();
+  if (!url.startsWith('https://script.google.com')) { alert('Please paste a valid Apps Script Web App URL.'); return; }
+  WEB_APP_URL = url; localStorage.setItem('gasUrl', url);
+  closeSetupModal(); updateBanner(true); document.getElementById('topUrlInput').value = url;
+}
+function connectFromBanner() {
+  const url = document.getElementById('topUrlInput').value.trim();
+  if (!url.startsWith('https://script.google.com')) { alert('Please paste a valid Apps Script Web App URL.'); return; }
+  WEB_APP_URL = url; localStorage.setItem('gasUrl', url); updateBanner(true);
+}
+function skipSetup() {
+  closeSetupModal();
+  document.querySelectorAll('.log-btn').forEach(b => { b.disabled = true; b.textContent = 'No Sheet'; });
+}
+function closeSetupModal() { const m = document.getElementById('setupModal'); if (m) m.remove(); }
+function updateBanner(ok) {
+  const b = document.getElementById('setupBanner');
+  const t = document.getElementById('connText');
+  if (ok) { b.classList.add('connected'); t.textContent = '✓ Connected to Google Sheets — sessions will be logged automatically'; }
+}
+
+// ─── WEEK TOGGLE ─────────────────────────────────
+function toggleWeek(id) { document.getElementById(id).classList.toggle('open'); }
+
+// ─── MODAL ───────────────────────────────────────
+function openModal(week, day, sessionName, type) {
+  if (!WEB_APP_URL) { alert('Please connect to Google Sheets first using the banner at the top.'); return; }
+  currentSession = { week, day, session: sessionName, type };
+  selectedStatus = '';
+  document.getElementById('modalTitle').textContent = sessionName;
+  document.getElementById('modalSubtitle').textContent = `Week ${week} · ${day}`;
+  document.getElementById('paceInput').value = '';
+  document.getElementById('notesInput').value = '';
+  document.getElementById('rpeSlider').value = 5;
+  document.getElementById('rpeVal').textContent = '5';
+  document.getElementById('rpeDesc').textContent = RPE[5];
+  document.getElementById('modalMsg').className = 'modal-msg';
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('submitBtn').textContent = 'Save to Sheets';
+  ['completed','partial','skipped'].forEach(s => document.getElementById(`opt-${s}`).className = 'status-opt');
+  document.getElementById('logModal').classList.add('open');
+}
+function closeModal() { document.getElementById('logModal').classList.remove('open'); }
+function selectStatus(s) {
+  selectedStatus = s;
+  ['completed','partial','skipped'].forEach(x => document.getElementById(`opt-${x}`).className = 'status-opt');
+  document.getElementById(`opt-${s.toLowerCase()}`).classList.add(`active-${s.toLowerCase()}`);
+}
+function updateRpe(v) {
+  document.getElementById('rpeVal').textContent = v;
+  document.getElementById('rpeDesc').textContent = RPE[parseInt(v)];
+}
+document.getElementById('logModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+// ─── SUBMIT ──────────────────────────────────────
+async function submitLog() {
+  if (!selectedStatus) { showMsg('error','Please select a status first.'); return; }
+  const pace  = document.getElementById('paceInput').value.trim();
+  const rpe   = document.getElementById('rpeSlider').value;
+  const notes = document.getElementById('notesInput').value.trim();
+  const btn   = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  const params = new URLSearchParams({ action:'log', week:currentSession.week, day:currentSession.day, session:currentSession.session, type:currentSession.type, status:selectedStatus, pace, rpe, notes });
+
+  try {
+    // no-cors lets us fire the request cross-origin without needing CORS headers back
+    await fetch(`${WEB_APP_URL}?${params}`, { method:'GET', mode:'no-cors' });
+    onSuccess(pace, rpe, notes);
+  } catch(e) {
+    showMsg('error','Could not reach Google Sheets. Check your URL and internet connection.');
+    btn.disabled = false; btn.textContent = 'Save to Sheets';
+  }
+}
+
+function onSuccess(pace, rpe, notes) {
+  showMsg('success','✓ Logged to Google Sheets!');
+  document.getElementById('submitBtn').textContent = '✓ Saved!';
+  const key = `${currentSession.week}-${currentSession.day}`;
+  logged[key] = { status: selectedStatus, pace, rpe, notes };
+  localStorage.setItem('loggedSessions', JSON.stringify(logged));
+  setBadge(currentSession.week, currentSession.day, selectedStatus);
+  refreshWeekCount(currentSession.week);
+  refreshProgress();
+  setTimeout(closeModal, 1500);
+}
+
+// ─── BADGES & PROGRESS ────────────────────────────
+function setBadge(week, day, status) {
+  const idx = DAYS.indexOf(day);
+  const badge = document.getElementById(`b-${week}-${idx}`);
+  if (!badge) return;
+  const map = { Completed:['status-completed','✅ Done'], Skipped:['status-skipped','❌ Skipped'], Partial:['status-partial','⚡ Partial'] };
+  const [cls, lbl] = map[status] || ['',''];
+  badge.className = `status-badge show ${cls}`;
+  badge.textContent = lbl;
+}
+function restoreBadges() {
+  Object.entries(logged).forEach(([key,data]) => {
+    const [week, day] = key.split('-');
+    setBadge(week, day, data.status);
+  });
+  for (let w = 1; w <= 8; w++) refreshWeekCount(w);
+}
+function refreshWeekCount(week) {
+  let c = 0;
+  DAYS.forEach(d => { if (logged[`${week}-${d}`]) c++; });
+  const el = document.getElementById(`wc-${week}`);
+  if (el) el.textContent = c;
+}
+function refreshProgress() {
+  const total = Object.keys(logged).length;
+  const done  = Object.values(logged).filter(s => s.status === 'Completed').length;
+  const pct   = Math.round((total / TOTAL) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent  = pct + '%';
+  document.getElementById('statLogged').textContent   = total;
+  document.getElementById('statDone').textContent     = done;
+}
+function showMsg(type, msg) {
+  const el = document.getElementById('modalMsg');
+  el.className = `modal-msg ${type}`; el.textContent = msg;
+}
+</script>
+</body>
+</html>
