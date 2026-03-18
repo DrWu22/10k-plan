@@ -2,7 +2,7 @@
   "name": "10K Training Plan",
   "short_name": "10K Plan",
   "description": "8-week 10K training plan with session logging to Google Sheets",
-  "start_url": "./10k-training-plan.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0d0d0f",
   "theme_color": "#0d0d0f",
